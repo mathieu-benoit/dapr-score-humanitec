@@ -1,9 +1,9 @@
 apiVersion: entity.humanitec.io/v1b1
 kind: Definition
 metadata:
-  id: dapr-state-redis
+  id: redis-dapr-state
 entity:
-  name: dapr-state-redis
+  name: redis-dapr-state
   type: dapr-state
   driver_type: humanitec/template
   driver_inputs:
