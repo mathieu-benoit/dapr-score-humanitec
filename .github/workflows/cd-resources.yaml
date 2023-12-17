@@ -4,7 +4,7 @@ permissions:
   id-token: write
 on:
   push:
-    branches:        
+    branches:
       - main
 env:
   HUMCTL_VERSION: '0.11.0'
@@ -20,12 +20,12 @@ jobs:
       - name: apply humanitec resources
         run: |
           # FIXME: automate this
+          humctl apply \
+              -f resources/dapr-workload.yaml \
+              --org ${{ secrets.HUMANITEC_ORG }}
           humctl apply -f \
-              --org ${{ secrets.HUMANITEC_ORG }} \
-              resources/dapr-workload.yaml
+              -f resources/in-cluster-redis.yaml \
+              --org ${{ secrets.HUMANITEC_ORG }}
           humctl apply -f \
-              --org ${{ secrets.HUMANITEC_ORG }} \
-              resources/in-cluster-redis.yaml
-          humctl apply -f \
-              --org ${{ secrets.HUMANITEC_ORG }} \
-              resources/redis-dapr-state.yaml
+              -f resources/redis-dapr-state.yaml \
+              --org ${{ secrets.HUMANITEC_ORG }}
