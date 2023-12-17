@@ -11,6 +11,9 @@ env:
 jobs:
   deploy-humanitec:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        resources: ["dapr-workload", "in-cluster-redis", "redis-dapr-state"]
     steps:
       - uses: actions/checkout@v4
       - name: install humctl
@@ -19,16 +22,7 @@ jobs:
           version: ${{ env.HUMCTL_VERSION }}
       - name: apply humanitec resources
         run: |
-          # FIXME: automate this
           humctl apply \
-              -f resources/dapr-workload.yaml \
-              --org ${{ secrets.HUMANITEC_ORG }} \
-              --token ${{ secrets.HUMANITEC_TOKEN }}
-          humctl apply -f \
-              -f resources/in-cluster-redis.yaml \
-              --org ${{ secrets.HUMANITEC_ORG }} \
-              --token ${{ secrets.HUMANITEC_TOKEN }}
-          humctl apply -f \
-              -f resources/redis-dapr-state.yaml \
+              -f resources/${{ matrix.resources }}.yaml \
               --org ${{ secrets.HUMANITEC_ORG }} \
               --token ${{ secrets.HUMANITEC_TOKEN }}
