@@ -1,0 +1,31 @@
+name: cd-resources
+permissions:
+  contents: read
+  id-token: write
+on:
+  push:
+    branches:        
+      - main
+env:
+  HUMCTL_VERSION: '0.11.0'
+jobs:
+  deploy-humanitec:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: install humctl
+        uses: humanitec/setup-cli-action@v1
+        with:
+          version: ${{ env.HUMCTL_VERSION }}
+      - name: apply humanitec resources
+        run: |
+          # FIXME: automate this
+          humctl apply -f \
+              --org ${{ secrets.HUMANITEC_ORG }} \
+              resources/dapr-workload.yaml
+          humctl apply -f \
+              --org ${{ secrets.HUMANITEC_ORG }} \
+              resources/in-cluster-redis.yaml
+          humctl apply -f \
+              --org ${{ secrets.HUMANITEC_ORG }} \
+              resources/redis-dapr-state.yaml
