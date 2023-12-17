@@ -1,0 +1,56 @@
+apiVersion: entity.humanitec.io/v1b1
+kind: Definition
+metadata:
+  id: in-cluster-redis
+entity:
+  name: in-cluster-redis
+  type: redis
+  driver_type: humanitec/template
+  driver_inputs:
+    values:
+      templates:
+        init: |-
+          name: redis
+          port: 6379
+        manifests: |-
+          deployment.yaml:
+            location: namespace
+            data:
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: {{ .init.name }}
+              spec:
+                selector:
+                  matchLabels:
+                    app: {{ .init.name }}
+                template:
+                  metadata:
+                    labels:
+                      app: {{ .init.name }}
+                  spec:
+                    containers:
+                    - name: {{ .init.name }}
+                      image: redis:alpine
+                      ports:
+                      - containerPort: {{ .init.port }}
+          service.yaml:
+            location: namespace
+            data:
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: {{ .init.name }}
+              spec:
+                type: ClusterIP
+                selector:
+                  app: {{ .init.name }}
+                ports:
+                - name: tcp-redis
+                  port: {{ .init.port }}
+                  targetPort: {{ .init.port }}
+        outputs: |
+          host: {{ .init.name }}
+          port: {{ .init.port }}
+  criteria:
+    - {}

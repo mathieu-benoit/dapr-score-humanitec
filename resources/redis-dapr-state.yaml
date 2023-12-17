@@ -1,0 +1,31 @@
+apiVersion: entity.humanitec.io/v1b1
+kind: Definition
+metadata:
+  id: dapr-state-redis
+entity:
+  name: dapr-state-redis
+  type: dapr-state
+  driver_type: humanitec/template
+  driver_inputs:
+    values:
+      templates:
+        init: |-
+          name: statestore
+        manifests: |-
+          statestore.yaml:
+            location: namespace
+            data:
+              apiVersion: dapr.io/v1alpha1
+              kind: Component
+              metadata:
+                name: {{ .init.name }}
+              spec:
+                type: state.redis
+                version: v1
+                metadata:
+                - name: redisHost
+                  value: ${resources.redis.outputs.host}:${resources.redis.outputs.port}
+        outputs: |
+          name: {{ .init.name }}
+  criteria:
+    - {}
