@@ -22,10 +22,13 @@ jobs:
           # FIXME: automate this
           humctl apply \
               -f resources/dapr-workload.yaml \
-              --org ${{ secrets.HUMANITEC_ORG }}
+              --org ${{ secrets.HUMANITEC_ORG }} \
+              --token ${{ secrets.HUMANITEC_TOKEN }}
           humctl apply -f \
               -f resources/in-cluster-redis.yaml \
-              --org ${{ secrets.HUMANITEC_ORG }}
+              --org ${{ secrets.HUMANITEC_ORG }} \
+              --token ${{ secrets.HUMANITEC_TOKEN }}
           humctl apply -f \
               -f resources/redis-dapr-state.yaml \
-              --org ${{ secrets.HUMANITEC_ORG }}
+              --org ${{ secrets.HUMANITEC_ORG }} \
+              --token ${{ secrets.HUMANITEC_TOKEN }}
