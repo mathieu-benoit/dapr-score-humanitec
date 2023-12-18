@@ -22,4 +22,4 @@ entity:
                 {{- end}}
                 dapr.io/enable-api-logging: "true"
   criteria:
-    - {}
+    - app_id: dapr-helloworld
