@@ -53,4 +53,4 @@ entity:
           host: {{ .init.name }}
           port: {{ .init.port }}
   criteria:
-    - app_id: dapr-helloworld
+    - {}
