@@ -10,7 +10,7 @@ env:
   ENVIRONMENT_ID: development
   SCORE_HUMANITEC_VERSION: 'latest'
   APP_NAME: dapr-helloworld
-  HUMCTL_VERSION: '0.11.0'
+  HUMCTL_VERSION: '0.12.0'
 jobs:
   deploy-humanitec:
     runs-on: ubuntu-22.04
