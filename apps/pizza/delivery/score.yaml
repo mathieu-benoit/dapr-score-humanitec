@@ -1,0 +1,30 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: pizza-delivery
+containers:
+  pizza-delivery:
+    image: salaboy/pizza-delivery:0.1.0
+    variables:
+      JAVA_OPTS: "-XX:+UseParallelGC -XX:ActiveProcessorCount=1 -XX:MaxRAMPercentage=75 -XX:TieredStopAtLevel=1"
+      PUB_SUB_NAME: "pubsub"
+      PUB_SUB_TOPIC: "topic"
+    livenessProbe:
+      httpGet:
+        path: /actuator/health
+        port: 8080
+    readinessProbe:
+      httpGet:
+        path: /actuator/health
+        port: 8080
+    resources:
+      limits:
+        cpu: "1"
+        memory: "2Gi"
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+service:
+  ports:
+    tcp:
+      port: 80
+      targetPort: 8080
