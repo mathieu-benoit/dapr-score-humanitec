@@ -42,7 +42,7 @@ jobs:
               --org ${{ secrets.HUMANITEC_ORG }} \
               --app ${{ env.APP_NAME }} \
               --env ${{ env.ENVIRONMENT_ID }} \
-              -f apps/hello-world-k8s/node/score.yaml
+              -f apps/hello-world/node/score.yaml
       - name: deploy score-humanitec - python
         run: |
           score-humanitec delta \
@@ -52,4 +52,4 @@ jobs:
               --org ${{ secrets.HUMANITEC_ORG }} \
               --app ${{ env.APP_NAME }} \
               --env ${{ env.ENVIRONMENT_ID }} \
-              -f apps/hello-world-k8s/python/score.yaml
+              -f apps/hello-world/python/score.yaml

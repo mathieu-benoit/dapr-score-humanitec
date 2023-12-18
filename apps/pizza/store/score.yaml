@@ -7,7 +7,7 @@ containers:
     variables:
       JAVA_OPTS: "-XX:+UseParallelGC -XX:ActiveProcessorCount=1 -XX:MaxRAMPercentage=75 -XX:TieredStopAtLevel=1"
       PUBLIC_IP: "localhost:8080"
-      STATE_STORE_NAME: "${resources.kvstore.name}"
+      STATE_STORE_NAME: "${resources.state-store.name}"
     livenessProbe:
       httpGet:
         path: /actuator/health
@@ -29,7 +29,7 @@ service:
       port: 80
       targetPort: 8080
 resources:
-  kvstore:
+  state-store:
     type: config
   dns:
     type: dns
