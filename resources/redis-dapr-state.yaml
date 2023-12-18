@@ -4,7 +4,7 @@ metadata:
   id: redis-dapr-state
 entity:
   name: redis-dapr-state
-  type: dapr-state
+  type: config
   driver_type: humanitec/template
   driver_inputs:
     values:
