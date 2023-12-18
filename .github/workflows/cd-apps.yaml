@@ -9,8 +9,7 @@ on:
 env:
   ENVIRONMENT_ID: development
   SCORE_HUMANITEC_VERSION: 'latest'
-  WORKLOAD_NAME: dapr-helloworld
-  APP_NAME: 
+  APP_NAME: dapr-helloworld
   HUMCTL_VERSION: '0.11.0'
 jobs:
   deploy-humanitec:
