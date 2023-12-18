@@ -7,7 +7,7 @@ jobs:
   job:
     strategy:
       matrix:
-        apps: ["hello-world-k8s/node", "hello-world-k8s/python", "pizza/store"]
+        apps: ["hello-world-k8s/node", "hello-world-k8s/python", "pizza/delivery", "pizza/kitchen", "pizza/store"]
     runs-on: ubuntu-22.04
     env:
       SCORE_HUMANITEC_VERSION: 'latest'
