@@ -6,7 +6,7 @@ containers:
     image: salaboy/pizza-kitchen:0.1.0
     variables:
       JAVA_OPTS: "-XX:+UseParallelGC -XX:ActiveProcessorCount=1 -XX:MaxRAMPercentage=75 -XX:TieredStopAtLevel=1"
-      PUB_SUB_NAME: "pubsub"
+      PUB_SUB_NAME: "${resources.pubsub.name}"
       PUB_SUB_TOPIC: "topic"
     livenessProbe:
       httpGet:
@@ -28,3 +28,6 @@ service:
     tcp:
       port: 80
       targetPort: 8080
+resources:
+  pubsub:
+    type: config
