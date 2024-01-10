@@ -14,4 +14,4 @@ service:
       targetPort: 3000
 resources:
   state-store:
-    type: config
+    type: dapr-state
