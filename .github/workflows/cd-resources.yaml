@@ -23,6 +23,6 @@ jobs:
       - name: apply humanitec resources
         run: |
           humctl apply \
-              -f resources/${{ matrix.resources }}.yaml \
+              -f humanitec-resources/${{ matrix.resources }}.yaml \
               --org ${{ secrets.HUMANITEC_ORG }} \
               --token ${{ secrets.HUMANITEC_TOKEN }}

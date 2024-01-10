@@ -10,8 +10,21 @@ make compose-up
 ## Deploy to Kubernetes
 
 ```bash
+export NAMESPACE=default
+
 make score-helm
 make k8s-up
+```
+
+## Deploy to Humanitec
+
+```bash
+export HUMANITEC_ORG=FIXME
+export HUMANITEC_TOKEN=FIXME
+export HUMANITEC_APP=FIXME
+export HUMANITEC_ENVIRONMENT=development
+
+make score-humanitec
 ```
 
 ## Resources
