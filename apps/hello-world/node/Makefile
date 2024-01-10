@@ -53,6 +53,9 @@ k8s-up:
 		--set workload.containers.annotations."dapr\.io/app-port"=\"3000\" \
 		--set workload.containers.annotations."dapr\.io/app-id"=nodeapp
 
+	kubectl patch deployment nodeapp -p '{"spec": {"template":{"metadata":{"annotations":{"dapr.io/enabled":"true"}}}} }'
+	kubectl patch deployment nodeapp -p '{"spec": {"template":{"metadata":{"annotations":{"dapr.io/app-port":"3000"}}}} }'
+
 k8s-down:
 	kubectl delete deployment redis \
 		-n ${NAMESPACE}

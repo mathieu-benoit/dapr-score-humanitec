@@ -33,6 +33,8 @@ k8s-up:
 		--values values.yaml \
 		--set workload.containers.annotations."dapr\.io/enabled"=\"true\" \
 		--set workload.containers.annotations."dapr\.io/app-id"=pythonapp
+	
+	kubectl patch deployment pythonapp -p '{"spec": {"template":{"metadata":{"annotations":{"dapr.io/enabled":"true"}}}} }'
 
 k8s-down:
 	helm uninstall \
