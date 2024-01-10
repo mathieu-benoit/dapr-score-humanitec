@@ -53,4 +53,5 @@ entity:
           host: {{ .init.name }}
           port: {{ .init.port }}
   criteria:
-    - {}
+    - class: redis
+    - class: default
