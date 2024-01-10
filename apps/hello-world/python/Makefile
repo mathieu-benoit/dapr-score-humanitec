@@ -42,11 +42,6 @@ k8s-down:
 		pythonapp
 
 score-humanitec:
-	humctl apply \
-		-f ../../../humanitec-resources/dapr-workload.yaml \
-		--org ${HUMANITEC_ORG} \
-		--token ${HUMANITEC_TOKEN}
-	
 	score-humanitec delta \
 		--env ${HUMANITEC_ENVIRONMENT} \
 		--app ${HUMANITEC_APP} \

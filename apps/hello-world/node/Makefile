@@ -1,9 +1,3 @@
-build:
-	docker build \
-		-t nodeapp:latest \
-		--platform linux/amd64 \
-		.
-
 score-compose:
 	score-compose run \
 		-f score.yaml \
@@ -71,21 +65,6 @@ k8s-down:
 		nodeapp
 
 score-humanitec:
-	humctl apply \
-		-f ../../../humanitec-resources/dapr-workload.yaml \
-		--org ${HUMANITEC_ORG} \
-		--token ${HUMANITEC_TOKEN}
-	
-	humctl apply \
-		-f ../../../humanitec-resources/in-cluster-redis.yaml \
-		--org ${HUMANITEC_ORG} \
-		--token ${HUMANITEC_TOKEN}
-
-	humctl apply \
-		-f ../../../humanitec-resources/redis-dapr-state.yaml \
-		--org ${HUMANITEC_ORG} \
-		--token ${HUMANITEC_TOKEN}
-	
 	score-humanitec delta \
 		--env ${HUMANITEC_ENVIRONMENT} \
 		--app ${HUMANITEC_APP} \
