@@ -28,5 +28,5 @@ k8s-up:
 	cd python && $(MAKE) k8s-up
 
 score-humanitec:
-	cd node && $(MAKE) score-humanitec
 	cd python && $(MAKE) score-humanitec
+	cd node && $(MAKE) score-humanitec

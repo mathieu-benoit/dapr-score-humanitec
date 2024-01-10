@@ -92,4 +92,5 @@ score-humanitec:
 		--org="${HUMANITEC_ORG}" \
 		--token "${HUMANITEC_TOKEN}" \
 		-f score.yaml \
-		--deploy
+		--deploy \
+		--retry
