@@ -1,0 +1,4 @@
+apps/hello-world/node/compose.yaml
+apps/hello-world/python/compose.yaml
+apps/hello-world/node-compose.yaml
+apps/hello-world/python-compose.yaml
