@@ -14,4 +14,5 @@ service:
       targetPort: 3000
 resources:
   state-store:
-    type: dapr-state
+    type: config
+    class: redis
