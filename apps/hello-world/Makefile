@@ -1,16 +1,20 @@
 score-compose:
 	score-compose run \
 		-f node/score.yaml \
-		-o node-compose.yaml
+		-o node/compose.yaml
 	score-compose run \
 		-f python/score.yaml \
-		-o python-compose.yaml
+		-o python/compose.yaml
 
 up:
 	docker compose \
-		-f node-compose.yaml \
-		-f python-compose.yaml \
-		-f compose.override.yaml \
+		-f node/compose.yaml \
+		-f python/compose.yaml \
+		-f node/compose.override.yaml \
+		-f python/compose.override.yaml \
+		-f node/compose.dapr-sidecar.yaml \
+		-f python/compose.dapr-sidecar.yaml \
+		-f python/compose.dapr-placement.yaml \
 		up \
 		-d
 

@@ -1,20 +1,7 @@
 services:
   pythonapp:
-    networks:
-      - network
-  pythonapp-dapr:
-    image: daprio/daprd:latest
     depends_on:
-      - pythonapp
-    command: ["./daprd",
-      "-app-id", "pythonapp"
-      ]
-    network_mode: "service:pythonapp"
-  dapr-placement:
-    image: daprio/dapr:latest
-    command: ["./placement", "-port", "50006"]
-    ports:
-      - "50006:50006"
+      - nodeapp
     networks:
       - network
 networks:

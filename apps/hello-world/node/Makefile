@@ -10,7 +10,13 @@ score-compose:
 		-o compose.yaml
 
 up:
-	docker compose up -d
+	docker compose \
+		-f compose.yaml \
+		-f compose.override.yaml \
+		-f compose.dapr-sidecar.yaml \
+		-f compose.dapr-placement.yaml \
+		up \
+		-d
 
 down:
 	docker compose down \

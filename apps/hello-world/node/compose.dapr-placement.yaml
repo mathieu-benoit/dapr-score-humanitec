@@ -1,0 +1,9 @@
+services:
+  dapr-placement:
+    image: daprio/dapr:latest
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
+    networks:
+      - network
+  

@@ -4,3 +4,6 @@ metadata:
 containers:
   pythonapp:
     image: ghcr.io/dapr/samples/hello-k8s-python:latest
+resources:
+  nodeapp:
+    type: service
