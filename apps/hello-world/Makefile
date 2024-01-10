@@ -1,12 +1,8 @@
 score-compose:
-	score-compose run \
-		-f node/score.yaml \
-		-o node/compose.yaml
-	score-compose run \
-		-f python/score.yaml \
-		-o python/compose.yaml
+	cd node && $(MAKE) score-compose
+	cd python && $(MAKE) score-compose
 
-up:
+compose-up:
 	docker compose \
 		-f node/compose.yaml \
 		-f python/compose.yaml \
@@ -18,23 +14,19 @@ up:
 		up \
 		-d
 
-down:
+compose-down:
 	docker compose down \
 		-v \
 		--remove-orphans
 
+score-helm:
+	cd node && $(MAKE) score-helm
+	cd python && $(MAKE) score-helm
+
+k8s-up:
+	cd node && $(MAKE) k8s-up
+	cd python && $(MAKE) k8s-up
+
 score-humanitec:
-	score-humanitec delta \
-		--env development \
-		--app ${HUMANITEC_APP} \
-		--org="${HUMANITEC_ORG}" \
-		--token "${HUMANITEC_TOKEN}" \
-		-f node/score.yaml
-		--deploy
-	score-humanitec delta \
-		--env development \
-		--app ${HUMANITEC_APP} \
-		--org="${HUMANITEC_ORG}" \
-		--token "${HUMANITEC_TOKEN}" \
-		-f python/score.yaml
-		--deploy
+	cd node && $(MAKE) score-humanitec
+	cd python && $(MAKE) score-humanitec

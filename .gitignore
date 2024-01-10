@@ -2,3 +2,5 @@ apps/hello-world/node/compose.yaml
 apps/hello-world/python/compose.yaml
 apps/hello-world/node-compose.yaml
 apps/hello-world/python-compose.yaml
+apps/hello-world/node/values.yaml
+apps/hello-world/python/values.yaml
