@@ -4,6 +4,8 @@ metadata:
 containers:
   pythonapp:
     image: ghcr.io/dapr/samples/hello-k8s-python:latest
+    variables:
+      STATE_STORE_NAME: "${resources.nodeapp.name}" # Not used anyway: https://github.com/dapr/quickstarts/blob/master/tutorials/hello-kubernetes/python/app.py#L27
 resources:
   nodeapp:
     type: service

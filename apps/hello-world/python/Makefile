@@ -1,21 +1,37 @@
-score-compose:
-	score-compose run \
-		-f score.yaml \
-		-o compose.yaml
+# Disable all the default make stuff
+MAKEFLAGS += --no-builtin-rules
+.SUFFIXES:
 
-compose-up:
+## Display a list of the documented make targets
+.PHONY: help
+help:
+	@echo Documented Make targets:
+	@perl -e 'undef $$/; while (<>) { while ($$_ =~ /## (.*?)(?:\n# .*)*\n.PHONY:\s+(\S+).*/mg) { printf "\033[36m%-30s\033[0m %s\n", $$2, $$1 } }' $(MAKEFILE_LIST) | sort
+
+.PHONY: .FORCE
+.FORCE:
+
+compose.yaml: score.yaml
+	score-compose init \
+		--no-sample
+	score-compose generate score.yaml
+
+## Generate a compose.yaml file from the score spec and launch it.
+.PHONY: compose-up
+compose-up: compose.yaml
 	docker compose \
 		-f compose.yaml \
-		-f compose.override.yaml \
 		-f compose.dapr-sidecar.yaml \
 		-f compose.dapr-placement.yaml \
 		up \
-		-d
-
-compose-down:
-	docker compose down \
-		-v \
+		--build \
+		-d \
 		--remove-orphans
+
+## Delete the containers running via compose down.
+.PHONY: compose-down
+compose-down:
+	docker compose down -v --remove-orphans || true
 
 score-helm:
 	score-helm run \
