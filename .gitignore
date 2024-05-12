@@ -4,3 +4,8 @@ apps/hello-world/node-compose.yaml
 apps/hello-world/python-compose.yaml
 apps/hello-world/node/values.yaml
 apps/hello-world/python/values.yaml
+apps/hello-world/node/.score-compose/99-default.provisioners.yaml
+apps/hello-world/node/.score-compose/state.yaml
+apps/hello-world/python/.score-compose/state.yaml
+apps/hello-world/python/.score-compose/99-default.provisioners.yaml
+apps/hello-world/node/.score-compose/mounts/
