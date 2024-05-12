@@ -2,7 +2,7 @@ services:
   nodeapp-dapr:
     image: daprio/daprd:latest
     depends_on:
-      - nodeapp
+      - nodeapp-nodeapp
       - dapr-placement
     command: ["./daprd",
       "-app-id", "nodeapp",
@@ -11,5 +11,4 @@ services:
       ]
     volumes:
       - "../components/:/components"
-    network_mode: "service:nodeapp"
   
