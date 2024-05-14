@@ -16,3 +16,11 @@ resources:
   state-store:
     type: config # To replace by state-store when supported.
     class: redis
+  dns:
+    type: dns
+  route:
+    type: route
+    params:
+      host: ${resources.dns.host}
+      path: /
+      port: 3000
