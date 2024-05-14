@@ -3,8 +3,7 @@
 ## Deploy locally with Docker
 
 ```bash
-make score-compose
-make compose-up
+make compose-test
 ```
 
 ## Deploy to Kubernetes
@@ -20,9 +19,10 @@ make k8s-up
 
 ```bash
 export HUMANITEC_ORG=FIXME
-export HUMANITEC_TOKEN=FIXME
 export HUMANITEC_APP=FIXME
 export HUMANITEC_ENVIRONMENT=development
+
+humctl login
 
 make score-humanitec
 ```
