@@ -8,9 +8,8 @@ on:
       - main
 env:
   ENVIRONMENT_ID: development
-  SCORE_HUMANITEC_VERSION: 'latest'
   APP_NAME: dapr-helloworld
-  HUMCTL_VERSION: '0.12.0'
+  HUMCTL_VERSION: '0.23.2'
 jobs:
   deploy-humanitec:
     runs-on: ubuntu-22.04
@@ -20,36 +19,19 @@ jobs:
         uses: humanitec/setup-cli-action@v1
         with:
           version: ${{ env.HUMCTL_VERSION }}
-      - name: create humanitec app
+      - name: create app
         run: |
           humctl create app ${{ env.APP_NAME }} \
               --token ${{ secrets.HUMANITEC_TOKEN }} \
               --org ${{ secrets.HUMANITEC_ORG }} \
               --name ${{ env.APP_NAME }} \
               || true
-      - name: install score-humanitec
-        uses: score-spec/setup-score@v2
-        with:
-          file: score-humanitec
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: ${{ env.SCORE_HUMANITEC_VERSION }}
-      - name: deploy score-humanitec - node
+      - name: deploy workloads
         run: |
-          score-humanitec delta \
-              --retry \
-              --deploy \
+          humctl score deploy \
               --token ${{ secrets.HUMANITEC_TOKEN }} \
               --org ${{ secrets.HUMANITEC_ORG }} \
               --app ${{ env.APP_NAME }} \
               --env ${{ env.ENVIRONMENT_ID }} \
-              -f apps/hello-world/node/score.yaml
-      - name: deploy score-humanitec - python
-        run: |
-          score-humanitec delta \
-              --retry \
-              --deploy \
-              --token ${{ secrets.HUMANITEC_TOKEN }} \
-              --org ${{ secrets.HUMANITEC_ORG }} \
-              --app ${{ env.APP_NAME }} \
-              --env ${{ env.ENVIRONMENT_ID }} \
-              -f apps/hello-world/python/score.yaml
+              -f apps/hello-world/score.deploy.yaml
+    
