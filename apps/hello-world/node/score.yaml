@@ -3,7 +3,7 @@ metadata:
   name: nodeapp
   annotations:
     dapr.io/enabled: "true"
-    dapr.io/app-id: "foo-app"
+    dapr.io/app-id: "nodeapp"
     dapr.io/app-port: "3000"
 containers:
   nodeapp:

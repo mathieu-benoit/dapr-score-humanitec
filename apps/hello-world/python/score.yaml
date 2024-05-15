@@ -3,6 +3,7 @@ metadata:
   name: pythonapp
   annotations:
     dapr.io/enabled: "true"
+    dapr.io/app-id: "pythonapp"
 containers:
   pythonapp:
     image: ghcr.io/dapr/samples/hello-k8s-python:latest

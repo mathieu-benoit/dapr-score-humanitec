@@ -73,12 +73,11 @@ k8s-down:
 		-f manifests.yaml \
 		-n ${NAMESPACE}
 
-score-humanitec:
-	score-humanitec delta \
+## Deploy the workload to Humanitec.
+.PHONY: humanitec-deploy
+humanitec-deploy:
+	humctl score deploy \
 		--env ${HUMANITEC_ENVIRONMENT} \
 		--app ${HUMANITEC_APP} \
 		--org="${HUMANITEC_ORG}" \
-		--token "${HUMANITEC_TOKEN}" \
-		-f score.yaml \
-		--deploy \
-		--retry
+		-f score.yaml

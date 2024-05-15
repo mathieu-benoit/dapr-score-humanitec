@@ -12,3 +12,6 @@ apps/hello-world/node/.score-compose/mounts/
 apps/hello-world/node/.score-k8s/state.yaml
 apps/hello-world/node/.score-k8s/zz-default.provisioners.yaml
 apps/hello-world/node/manifests.yaml
+apps/hello-world/python/.score-k8s/state.yaml
+apps/hello-world/python/.score-k8s/zz-default.provisioners.yaml
+apps/hello-world/python/manifests.yaml

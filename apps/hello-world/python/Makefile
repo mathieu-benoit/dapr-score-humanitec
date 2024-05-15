@@ -11,6 +11,8 @@ help:
 .PHONY: .FORCE
 .FORCE:
 
+WORKLOAD_NAME = pythonapp
+
 compose.yaml: score.yaml
 	score-compose init \
 		--no-sample
@@ -33,36 +35,43 @@ compose-up: compose.yaml
 compose-down:
 	docker compose down -v --remove-orphans || true
 
-score-helm:
-	score-helm run \
-		-f score.yaml \
-		-o values.yaml
+manifests.yaml: score.yaml
+	score-k8s init \
+		--no-sample
+	score-k8s generate score.yaml
 
-k8s-up:
-	helm upgrade \
+NAMESPACE ?= default
+## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
+.PHONY: k8s-up
+k8s-up: manifests.yaml
+	$(MAKE) k8s-down || true
+	$(MAKE) compose-down || true
+	kubectl apply \
+		-f manifests.yaml \
+		-n ${NAMESPACE}
+
+## Expose the container deployed in Kubernetes via port-forward.
+.PHONY: k8s-test
+k8s-test: k8s-up
+	kubectl wait pods \
 		-n ${NAMESPACE} \
-		--install \
-		--create-namespace \
-		pythonapp \
-		--repo https://score-spec.github.io/score-helm-charts \
-		workload \
-		--values values.yaml \
-		--set workload.containers.annotations."dapr\.io/enabled"=\"true\" \
-		--set workload.containers.annotations."dapr\.io/app-id"=pythonapp
-	
-	kubectl patch deployment pythonapp -p '{"spec": {"template":{"metadata":{"annotations":{"dapr.io/enabled":"true"}}}} }'
+		-l score-workload=${WORKLOAD_NAME} \
+		--for condition=Ready \
+		--timeout=90s
+	kubectl -n nginx-gateway port-forward service/ngf-nginx-gateway-fabric 8080:80
 
+## Delete the deployment of the local container in Kubernetes.
+.PHONY: k8s-down
 k8s-down:
-	helm uninstall \
-		-n ${NAMESPACE} \
-		pythonapp
+	kubectl delete \
+		-f manifests.yaml \
+		-n ${NAMESPACE}
 
-score-humanitec:
-	score-humanitec delta \
+## Deploy the workload to Humanitec.
+.PHONY: humanitec-deploy
+humanitec-deploy:
+	humctl score deploy \
 		--env ${HUMANITEC_ENVIRONMENT} \
 		--app ${HUMANITEC_APP} \
 		--org="${HUMANITEC_ORG}" \
-		--token "${HUMANITEC_TOKEN}" \
-		-f score.yaml \
-		--deploy \
-		--retry
+		-f score.yaml
