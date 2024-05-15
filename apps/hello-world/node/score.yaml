@@ -1,6 +1,10 @@
 apiVersion: score.dev/v1b1
 metadata:
   name: nodeapp
+  annotations:
+    dapr.io/enabled: "true"
+    dapr.io/app-id: "foo-app"
+    dapr.io/app-port: "3000"
 containers:
   nodeapp:
     image: ghcr.io/dapr/samples/hello-k8s-node:latest
