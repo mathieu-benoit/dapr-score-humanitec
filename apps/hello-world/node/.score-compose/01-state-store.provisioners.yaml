@@ -1,4 +1,4 @@
-- uri: template://default-provisioners/redis
+- uri: template://default-provisioners/redis-state-store
   # By default, match all redis types regardless of class and id. If you want to override this, create another
   # provisioner definition with a higher priority.
   type: config # To replace by state-store when supported.
@@ -14,13 +14,22 @@
     password: {{ dig "password" .Init.randomPassword .State | quote }}
   # Return the outputs schema that consumers expect
   outputs: |
-    name: {{ splitList "." .Id | last }}
-    host: {{ .State.serviceName }}
-    port: {{ .Init.port }}
-    username: default
-    password: {{ .State.password | quote }}
+    name: {{ .State.serviceName }}
   # write the config file to the mounts directory
   files: |
+    dapr-components/{{ .State.serviceName }}.yaml: |
+      apiVersion: dapr.io/v1alpha1
+      kind: Component
+      metadata:
+        name: {{ .State.serviceName }}
+      spec:
+        type: state.redis
+        version: v1
+        metadata:
+        - name: redisHost
+          value: {{ .State.serviceName }}:{{ .Init.port }}
+        - name: redisPassword
+          value: {{ .State.password }}
     {{ .State.serviceName }}/redis.conf: |
       requirepass {{ .State.password }}
       port {{ .Init.port }}
@@ -38,7 +47,7 @@
     {{ .State.serviceName }}:
       labels:
         dev.score.compose.res.uid: {{ .Uid }}
-      image: redis:7
+      image: redis:7-alpine
       restart: always
       entrypoint: ["redis-server"]
       command: ["/usr/local/etc/redis/redis.conf"]

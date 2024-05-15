@@ -13,9 +13,11 @@ help:
 
 WORKLOAD_NAME = pythonapp
 
-compose.yaml: score.yaml
+.score-compose/state.yaml:
 	score-compose init \
 		--no-sample
+
+compose.yaml: score.yaml .score-compose/state.yaml Makefile
 	score-compose generate score.yaml
 
 ## Generate a compose.yaml file from the score spec and launch it.
