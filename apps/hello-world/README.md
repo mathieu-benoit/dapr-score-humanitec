@@ -42,6 +42,7 @@ helm upgrade \
 
 make k8s-up
 
+cd node
 curl $(score-k8s resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
 ```
 
