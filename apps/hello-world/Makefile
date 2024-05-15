@@ -11,6 +11,8 @@ help:
 .PHONY: .FORCE
 .FORCE:
 
+WORKLOAD_NAME = nodeapp
+
 compose.yaml: node/score.yaml python/score.yaml
 	cd node && $(MAKE) compose.yaml
 	cd python && $(MAKE) compose.yaml
@@ -41,18 +43,33 @@ compose-down:
 	cd node && $(MAKE) compose-down
 	cd python && $(MAKE) compose-down
 
-score-helm:
-	cd node && $(MAKE) score-helm
-	cd python && $(MAKE) score-helm
+manifests.yaml: node/score.yaml python/score.yaml
+	cd node && $(MAKE) manifests.yaml
+	cd python && $(MAKE) manifests.yaml
 
+NAMESPACE ?= default
+## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
+.PHONY: k8s-up
 k8s-up:
 	cd node && $(MAKE) k8s-up
 	cd python && $(MAKE) k8s-up
 
+## Expose the container deployed in Kubernetes via port-forward.
+.PHONY: k8s-test
+k8s-test: k8s-up
+	kubectl wait pods \
+		-n ${NAMESPACE} \
+		-l score-workload=${WORKLOAD_NAME} \
+		--for condition=Ready \
+		--timeout=90s
+	kubectl -n nginx-gateway port-forward service/ngf-nginx-gateway-fabric 8080:80
+
+## Delete the deployment of the local container in Kubernetes.
+.PHONY: k8s-down
 k8s-down:
 	cd node && $(MAKE) k8s-down
 	cd python && $(MAKE) k8s-down
 
-score-humanitec:
-	cd python && $(MAKE) score-humanitec
-	cd node && $(MAKE) score-humanitec
+humanitec-deploy:
+	cd python && $(MAKE) humanitec-deploy
+	cd node && $(MAKE) humanitec-deploy
