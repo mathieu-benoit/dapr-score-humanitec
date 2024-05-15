@@ -11,6 +11,8 @@ help:
 .PHONY: .FORCE
 .FORCE:
 
+WORKLOAD_NAME = nodeapp
+
 compose.yaml: score.yaml
 	score-compose init \
 		--no-sample
@@ -32,59 +34,44 @@ compose-up: compose.yaml
 .PHONY: compose-test
 compose-test: compose-up
 	sleep 5
-	curl $$(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
+	curl $$(score-compose resources get-outputs dns.default#${WORKLOAD_NAME}.dns --format '{{ .host }}:8080')
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
 compose-down:
 	docker compose down -v --remove-orphans || true
 
-score-helm:
-	score-helm run \
-		-f score.yaml \
-		-p containers.nodeapp.variables.STATE_STORE_NAME=statestore \
-		-o values.yaml
+manifests.yaml: score.yaml
+	score-k8s init \
+		--no-sample
+	score-k8s generate score.yaml
 
-k8s-up:
-	kubectl create deployment redis \
-		--image=redis:alpine \
-		-n ${NAMESPACE}
-	kubectl expose deployment redis \
-		--port 6379 \
-		-n ${NAMESPACE}
-	
+NAMESPACE ?= default
+## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
+.PHONY: k8s-up
+k8s-up: manifests.yaml
+	$(MAKE) k8s-down || true
+	$(MAKE) compose-down || true
 	kubectl apply \
-		-f ../components/statestore.yaml \
+		-f manifests.yaml \
 		-n ${NAMESPACE}
-	
-	helm upgrade \
+
+## Expose the container deployed in Kubernetes via port-forward.
+.PHONY: k8s-test
+k8s-test: k8s-up
+	kubectl wait pods \
 		-n ${NAMESPACE} \
-		--install \
-		--create-namespace \
-		nodeapp \
-		--repo https://score-spec.github.io/score-helm-charts \
-		workload \
-		--values values.yaml \
-		--set workload.containers.annotations."dapr\.io/enabled"=\"true\" \
-		--set workload.containers.annotations."dapr\.io/app-port"=\"3000\" \
-		--set workload.containers.annotations."dapr\.io/app-id"=nodeapp
+		-l score-workload=${WORKLOAD_NAME} \
+		--for condition=Ready \
+		--timeout=90s
+	kubectl -n nginx-gateway port-forward service/ngf-nginx-gateway-fabric 8080:80
 
-	kubectl patch deployment nodeapp -p '{"spec": {"template":{"metadata":{"annotations":{"dapr.io/enabled":"true"}}}} }'
-	kubectl patch deployment nodeapp -p '{"spec": {"template":{"metadata":{"annotations":{"dapr.io/app-port":"3000"}}}} }'
-
+## Delete the deployment of the local container in Kubernetes.
+.PHONY: k8s-down
 k8s-down:
-	kubectl delete deployment redis \
-		-n ${NAMESPACE}
-	kubectl delete svc redis \
-		-n ${NAMESPACE}
-	
 	kubectl delete \
-		-f ../components/statestore.yaml \
+		-f manifests.yaml \
 		-n ${NAMESPACE}
-	
-	helm uninstall \
-		-n ${NAMESPACE} \
-		nodeapp
 
 score-humanitec:
 	score-humanitec delta \
