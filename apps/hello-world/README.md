@@ -6,6 +6,8 @@
 make compose-up
 
 curl $(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
+
+docker logs hello-world-nodeapp-nodeapp-1
 ```
 
 ## Deploy to Kubernetes

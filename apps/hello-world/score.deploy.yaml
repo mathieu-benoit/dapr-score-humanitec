@@ -1,5 +1,5 @@
 apiVersion: config.humanitec.io/v1b1
 kind: ScoreDeployConfig
 workloads:
-  - specFile: ./node/score.yaml
-  - specFile: ./python/score.yaml
+  - specFile: ./score-node.yaml
+  - specFile: ./score-python.yaml
