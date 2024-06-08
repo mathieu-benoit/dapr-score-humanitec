@@ -1,9 +1,0 @@
-services:
-  pythonapp-dapr:
-    image: daprio/daprd:latest
-    depends_on:
-      - pythonapp-pythonapp
-    command: ["./daprd",
-      "-app-id", "pythonapp"
-      ]
-  

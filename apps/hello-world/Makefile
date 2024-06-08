@@ -11,48 +11,46 @@ help:
 .PHONY: .FORCE
 .FORCE:
 
-WORKLOAD_NAME = nodeapp
+.score-compose/state.yaml:
+	score-compose init \
+		--no-sample
 
-compose.yaml: node/score.yaml python/score.yaml
-	cd node && $(MAKE) compose.yaml
-	cd python && $(MAKE) compose.yaml
+compose.yaml: score-node.yaml score-python.yaml .score-compose/state.yaml Makefile
+	score-compose generate score-node.yaml
+	score-compose generate score-python.yaml
+	../../scripts/inject-dapr-sidecar.sh
+	../../scripts/inject-dapr-placement.sh
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
 compose-up: compose.yaml
-	docker compose \
-		-f node/compose.yaml \
-		-f python/compose.yaml \
-		-f node/compose.dapr-sidecar.yaml \
-		-f python/compose.dapr-sidecar.yaml \
-		-f python/compose.dapr-placement.yaml \
-		up \
-		-d \
-		--remove-orphans
+	docker compose -f compose.yaml up --build -d --remove-orphans
+	sleep 5
 
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
 compose-test: compose-up
-	sleep 5
-	cd node
-	curl $$(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080/ports')
+	curl $$(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
 compose-down:
-	cd node && $(MAKE) compose-down
-	cd python && $(MAKE) compose-down
+	docker compose down -v --remove-orphans || true
 
-manifests.yaml: node/score.yaml python/score.yaml
-	cd node && $(MAKE) manifests.yaml
-	cd python && $(MAKE) manifests.yaml
+manifests.yaml: score.yaml
+	score-k8s init \
+		--no-sample
+	score-k8s generate score.yaml
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
 .PHONY: k8s-up
-k8s-up:
-	cd node && $(MAKE) k8s-up
-	cd python && $(MAKE) k8s-up
+k8s-up: manifests.yaml
+	$(MAKE) k8s-down || true
+	$(MAKE) compose-down || true
+	kubectl apply \
+		-f manifests.yaml \
+		-n ${NAMESPACE}
 
 ## Expose the container deployed in Kubernetes via port-forward.
 .PHONY: k8s-test
@@ -67,9 +65,15 @@ k8s-test: k8s-up
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
 k8s-down:
-	cd node && $(MAKE) k8s-down
-	cd python && $(MAKE) k8s-down
+	kubectl delete \
+		-f manifests.yaml \
+		-n ${NAMESPACE}
 
+## Deploy the workload to Humanitec.
+.PHONY: humanitec-deploy
 humanitec-deploy:
-	cd python && $(MAKE) humanitec-deploy
-	cd node && $(MAKE) humanitec-deploy
+	humctl score deploy \
+		--env ${HUMANITEC_ENVIRONMENT} \
+		--app ${HUMANITEC_APP} \
+		--org ${HUMANITEC_ORG} \
+		--deploy-config score.deploy.yaml
