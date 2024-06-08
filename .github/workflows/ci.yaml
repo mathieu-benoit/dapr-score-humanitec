@@ -39,4 +39,5 @@ jobs:
           version: ${{ env.SCORE_COMPOSE_VERSION }}
       - name: make compose-test
         run: |
+          cd apps/hello-world/node
           make compose-test
