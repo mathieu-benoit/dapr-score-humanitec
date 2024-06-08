@@ -1,5 +1,5 @@
 - uri: template://default-provisioners/redis
-  type: config # To replace by state-store when supported.
+  type: dapr-state-store
   class: redis
   init: |
     randomServiceName: redis-{{ randAlphaNum 6 | lower }}

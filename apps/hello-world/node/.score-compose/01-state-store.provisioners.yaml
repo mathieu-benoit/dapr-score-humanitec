@@ -1,7 +1,7 @@
 - uri: template://default-provisioners/redis-state-store
   # By default, match all redis types regardless of class and id. If you want to override this, create another
   # provisioner definition with a higher priority.
-  type: config # To replace by state-store when supported.
+  type: dapr-state-store
   class: redis
   # Init template has the default port and a random service name and password if needed later
   init: |
