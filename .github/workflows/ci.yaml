@@ -55,6 +55,10 @@ jobs:
           file: score-k8s
           token: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ env.SCORE_K8S_VERSION }}
+      - name: make kind-create-cluster
+        run: |
+          cd apps/hello-world
+          make kind-create-cluster
       - name: make k8s-test
         run: |
           cd apps/hello-world
