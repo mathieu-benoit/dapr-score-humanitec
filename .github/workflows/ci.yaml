@@ -10,7 +10,7 @@ jobs:
         apps: ["hello-world/node", "hello-world/python", "pizza/delivery", "pizza/kitchen", "pizza/store"]
     runs-on: ubuntu-22.04
     env:
-      HUMCTL_VERSION: '0.23.2'
+      HUMCTL_VERSION: '0.25.0'
     steps:
       - name: checkout code
         uses: actions/checkout@v3
