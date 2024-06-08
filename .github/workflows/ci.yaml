@@ -7,7 +7,7 @@ jobs:
   score-validate:
     strategy:
       matrix:
-        apps: ["hello-world/node", "hello-world/python", "pizza/delivery", "pizza/kitchen", "pizza/store"]
+        apps: ["hello-world/score-node.yaml", "hello-world/score-python.yaml", "pizza/score-delivery.yaml", "pizza/score-kitchen.yaml", "pizza/score-store.yaml"]
     runs-on: ubuntu-22.04
     env:
       HUMCTL_VERSION: '0.25.0'
@@ -21,7 +21,7 @@ jobs:
       - name: humctl score validate
         run: |
           humctl score validate \
-              apps/${{ matrix.apps }}/score.yaml \
+              apps/${{ matrix.apps }} \
               --local
   score-compose:
     runs-on: ubuntu-22.04
