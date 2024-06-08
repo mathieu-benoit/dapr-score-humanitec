@@ -59,7 +59,13 @@ jobs:
         run: |
           cd apps/hello-world
           make kind-create-cluster
-      - name: make k8s-test
+      - name: make k8s-up
+        id: k8s-up
         run: |
-          cd apps/hello-world
-          make k8s-test
+          make k8s-up
+      - name: catch k8s-up errors
+        if: ${{ failure() && steps.k8s-up.outcome == 'failure' }}
+        run: |
+          kubectl get events
+          kubectl logs \
+              -l app.kubernetes.io/name=nodeapp
