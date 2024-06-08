@@ -41,3 +41,21 @@ jobs:
         run: |
           cd apps/hello-world
           make compose-test
+  score-k8s:
+    runs-on: ubuntu-22.04
+    env:
+      HUMCTL_VERSION: '0.25.0'
+      SCORE_K8S_VERSION: 'latest'
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: install score-k8s
+        uses: score-spec/setup-score@v3
+        with:
+          file: score-k8s
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ env.SCORE_K8S_VERSION }}
+      - name: make k8s-test
+        run: |
+          cd apps/hello-world
+          make k8s-test

@@ -3,9 +3,7 @@
 ## Deploy locally with Docker
 
 ```bash
-make compose-up
-
-curl $(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
+make compose-test
 
 docker logs hello-world-nodeapp-nodeapp-1
 ```
@@ -13,9 +11,7 @@ docker logs hello-world-nodeapp-nodeapp-1
 ## Deploy to Kubernetes
 
 ```bash
-make k8s-up
-
-curl $(score-k8s resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
+make k8s-test
 ```
 
 ## Deploy to Humanitec

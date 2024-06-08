@@ -30,37 +30,48 @@ compose-up: compose.yaml
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
 compose-test: compose-up
-	curl $$(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080')
+	curl $$(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080') # Will return "Cannot GET" but that's not an error per se.
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
 compose-down:
 	docker compose down -v --remove-orphans || true
 
-manifests.yaml: score.yaml
+.score-k8s/state.yaml:
 	score-k8s init \
 		--no-sample
-	score-k8s generate score.yaml
+
+manifests.yaml: score-node.yaml score-python.yaml .score-k8s/state.yaml Makefile
+	score-k8s generate score-node.yaml
+	score-k8s generate score-python.yaml
+
+## Create a local Kind cluster.
+.PHONY: kind-create-cluster
+kind-create-cluster:
+	../../scripts/setup-kind-cluster.sh
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.
 .PHONY: k8s-up
 k8s-up: manifests.yaml
-	$(MAKE) k8s-down || true
-	$(MAKE) compose-down || true
 	kubectl apply \
 		-f manifests.yaml \
 		-n ${NAMESPACE}
-
-## Expose the container deployed in Kubernetes via port-forward.
-.PHONY: k8s-test
-k8s-test: k8s-up
+	kubectl wait deployments/nodeapp \
+		-n ${NAMESPACE} \
+		--for condition=Available \
+		--timeout=90s
 	kubectl wait pods \
 		-n ${NAMESPACE} \
-		-l score-workload=${WORKLOAD_NAME} \
+		-l app.kubernetes.io/name=nodeapp \
 		--for condition=Ready \
 		--timeout=90s
-	kubectl -n nginx-gateway port-forward service/ngf-nginx-gateway-fabric 8080:80
+
+## Test the exposed endpoint and show the logs.
+.PHONY: k8s-test
+k8s-test: k8s-up
+	curl $$(score-k8s resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}') # Will return "Cannot GET" but that's not an error per se.
+	kubectl logs -l app.kubernetes.io/name=nodeapp -n ${NAMESPACE}
 
 ## Delete the deployment of the local container in Kubernetes.
 .PHONY: k8s-down
