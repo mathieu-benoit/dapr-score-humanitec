@@ -28,4 +28,4 @@ entity:
         outputs: |
           name: {{ .init.name }}
   criteria:
-    - {}
+    - class: redis
