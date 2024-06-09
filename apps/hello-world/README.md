@@ -25,6 +25,9 @@ export HUMANITEC_ENVIRONMENT=development
 
 humctl login
 
+humctl apply -f humanitec-resources/in-cluster-redis.yaml
+humctl apply -f humanitec-resources/redis-dapr-state.yaml
+
 make humanitec-deploy
 ```
 

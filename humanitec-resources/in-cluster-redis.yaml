@@ -1,19 +1,19 @@
 apiVersion: entity.humanitec.io/v1b1
 kind: Definition
 metadata:
-  id: in-cluster-redis
+  id: redis-in-cluster
 entity:
-  name: in-cluster-redis
+  name: redis-in-cluster
   type: redis
   driver_type: humanitec/template
   driver_inputs:
     values:
       templates:
         init: |-
-          name: redis
+          name: redis-{{ randAlpha 5 | lower}}
           port: 6379
         manifests: |-
-          deployment.yaml:
+          {{ .resource.id }}-deployment.yaml:
             location: namespace
             data:
               apiVersion: apps/v1
@@ -29,12 +29,33 @@ entity:
                     labels:
                       app: {{ .init.name }}
                   spec:
+                    automountServiceAccountToken: false
+                    securityContext:
+                      fsGroup: 1000
+                      runAsGroup: 1000
+                      runAsNonRoot: true
+                      runAsUser: 1000
+                      seccompProfile:
+                        type: RuntimeDefault
                     containers:
                     - name: {{ .init.name }}
+                      securityContext:
+                        allowPrivilegeEscalation: false
+                        capabilities:
+                          drop:
+                            - ALL
+                        privileged: false
+                        readOnlyRootFilesystem: true
                       image: redis:alpine
                       ports:
                       - containerPort: {{ .init.port }}
-          service.yaml:
+                      volumeMounts:
+                      - mountPath: /data
+                        name: redis-data
+                    volumes:
+                    - name: redis-data
+                      emptyDir: {}
+          {{ .resource.id }}-service.yaml:
             location: namespace
             data:
               apiVersion: v1
@@ -52,6 +73,8 @@ entity:
         outputs: |
           host: {{ .init.name }}
           port: {{ .init.port }}
+        secrets: |
+          username: ""
+          password: ""
   criteria:
-    - class: redis
-    - class: default
+    - {}
