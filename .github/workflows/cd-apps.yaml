@@ -33,5 +33,5 @@ jobs:
               --org ${{ secrets.HUMANITEC_ORG }} \
               --app ${{ env.APP_NAME }} \
               --env ${{ env.ENVIRONMENT_ID }} \
-              -f apps/hello-world/score.deploy.yaml
+              --deploy-config apps/hello-world/score.deploy.yaml
     
