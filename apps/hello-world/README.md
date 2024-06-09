@@ -11,6 +11,8 @@ docker logs hello-world-nodeapp-nodeapp-1
 ## Deploy to Kubernetes
 
 ```bash
+make kind-create-cluster
+
 make k8s-test
 ```
 
