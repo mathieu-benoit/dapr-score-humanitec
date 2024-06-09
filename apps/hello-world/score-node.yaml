@@ -1,6 +1,10 @@
 apiVersion: score.dev/v1b1
 metadata:
   name: nodeapp
+  annotations:
+    dapr.io/enabled: "true"
+    dapr.io/app-id: "nodeapp"
+    dapr.io/app-port: "3000"
 containers:
   nodeapp:
     image: ghcr.io/dapr/samples/hello-k8s-node:latest
@@ -14,5 +18,13 @@ service:
       targetPort: 3000
 resources:
   state-store:
-    type: config
+    type: dapr-state-store
     class: redis
+  dns:
+    type: dns
+  route:
+    type: route
+    params:
+      host: ${resources.dns.host}
+      path: /
+      port: 3000

@@ -3,28 +3,27 @@
 ## Deploy locally with Docker
 
 ```bash
-make score-compose
-make compose-up
+make compose-test
+
+docker logs hello-world-nodeapp-nodeapp-1
 ```
 
 ## Deploy to Kubernetes
 
 ```bash
-export NAMESPACE=default
-
-make score-helm
-make k8s-up
+make k8s-test
 ```
 
 ## Deploy to Humanitec
 
 ```bash
 export HUMANITEC_ORG=FIXME
-export HUMANITEC_TOKEN=FIXME
 export HUMANITEC_APP=FIXME
 export HUMANITEC_ENVIRONMENT=development
 
-make score-humanitec
+humctl login
+
+make humanitec-deploy
 ```
 
 ## Resources

@@ -1,0 +1,14 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: pythonapp
+  annotations:
+    dapr.io/enabled: "true"
+    dapr.io/app-id: "pythonapp"
+containers:
+  pythonapp:
+    image: ghcr.io/dapr/samples/hello-k8s-python:latest
+    variables:
+      NODE_APP_NAME: "${resources.nodeapp.name}" # Not used anyway: https://github.com/dapr/quickstarts/blob/master/tutorials/hello-kubernetes/python/app.py#L27
+resources:
+  nodeapp:
+    type: service

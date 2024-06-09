@@ -1,9 +1,0 @@
-apiVersion: score.dev/v1b1
-metadata:
-  name: pythonapp
-containers:
-  pythonapp:
-    image: ghcr.io/dapr/samples/hello-k8s-python:latest
-resources:
-  nodeapp:
-    type: service

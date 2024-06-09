@@ -1,9 +1,0 @@
-services:
-  pythonapp:
-    depends_on:
-      - nodeapp
-    networks:
-      - network
-networks:
-    network:
-  
