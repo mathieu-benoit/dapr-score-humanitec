@@ -6,3 +6,4 @@ manifests.yaml
 .score-k8s/*
 !.score-k8s/00-service.provisioners.yaml
 !.score-k8s/01-state-store.provisioners.yaml
+.vscode/settings.json

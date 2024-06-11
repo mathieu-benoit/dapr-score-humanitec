@@ -4,7 +4,7 @@ Resources used in the blog post: [Dapr with Score and Humanitec — Improving th
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mathieu-benoit/dapr-score-humanitec)
 
-![](hello-world-k8s.png)
+![](dapr-hello-world.png)
 
 ## Deploy locally with Docker
 
