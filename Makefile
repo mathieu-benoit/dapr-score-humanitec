@@ -18,8 +18,8 @@ help:
 compose.yaml: score-node.yaml score-python.yaml .score-compose/state.yaml Makefile
 	score-compose generate score-node.yaml
 	score-compose generate score-python.yaml
-	../../scripts/inject-dapr-sidecar.sh
-	../../scripts/inject-dapr-placement.sh
+	scripts/inject-dapr-sidecar.sh
+	scripts/inject-dapr-placement.sh
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
@@ -48,7 +48,7 @@ manifests.yaml: score-node.yaml score-python.yaml .score-k8s/state.yaml Makefile
 ## Create a local Kind cluster.
 .PHONY: kind-create-cluster
 kind-create-cluster:
-	../../scripts/setup-kind-cluster.sh
+	scripts/setup-kind-cluster.sh
 
 NAMESPACE ?= default
 ## Generate a manifests.yaml file from the score spec and apply it in Kubernetes.

@@ -5,9 +5,6 @@ on:
   push:
 jobs:
   score-validate:
-    strategy:
-      matrix:
-        apps: ["hello-world/score-node.yaml", "hello-world/score-python.yaml", "pizza/score-delivery.yaml", "pizza/score-kitchen.yaml", "pizza/score-store.yaml"]
     runs-on: ubuntu-22.04
     env:
       HUMCTL_VERSION: '0.25.0'
@@ -18,10 +15,15 @@ jobs:
         uses: humanitec/setup-cli-action@v1
         with:
           version: ${{ env.HUMCTL_VERSION }}
-      - name: humctl score validate
+      - name: humctl score validate node
         run: |
           humctl score validate \
-              apps/${{ matrix.apps }} \
+              score-node.yaml \
+              --local
+      - name: humctl score validate python
+        run: |
+          humctl score validate \
+              score-python.yaml \
               --local
   score-compose:
     runs-on: ubuntu-22.04
@@ -39,7 +41,6 @@ jobs:
           version: ${{ env.SCORE_COMPOSE_VERSION }}
       - name: make compose-test
         run: |
-          cd apps/hello-world
           make compose-test
   score-k8s:
     runs-on: ubuntu-22.04
@@ -57,12 +58,10 @@ jobs:
           version: ${{ env.SCORE_K8S_VERSION }}
       - name: make kind-create-cluster
         run: |
-          cd apps/hello-world
           make kind-create-cluster
       - name: make k8s-up
         id: k8s-up
         run: |
-          cd apps/hello-world
           make k8s-up
       - name: catch k8s-up errors
         if: ${{ failure() && steps.k8s-up.outcome == 'failure' }}
