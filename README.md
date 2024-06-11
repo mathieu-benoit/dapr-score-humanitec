@@ -1,5 +1,7 @@
 # Dapr with Score & Humanitec
 
+![](dapr-score-logo.png)
+
 Resources used in the blog post: [Dapr with Score and Humanitec — Improving the Developer Experience of your Platform, on steroids!](https://medium.com/@mabenoit/dapr-with-score-and-humanitec-developer-experience-with-your-platform-on-steroids-a848f2de0a5a).
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mathieu-benoit/dapr-score-humanitec)
