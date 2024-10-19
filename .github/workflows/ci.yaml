@@ -5,9 +5,9 @@ on:
   push:
 jobs:
   score-validate:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
-      HUMCTL_VERSION: '0.25.0'
+      HUMCTL_VERSION: '*'
     steps:
       - name: checkout code
         uses: actions/checkout@v3
@@ -26,9 +26,9 @@ jobs:
               score-python.yaml \
               --local
   score-compose:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
-      HUMCTL_VERSION: '0.25.0'
+      HUMCTL_VERSION: '*'
       SCORE_COMPOSE_VERSION: 'latest'
     steps:
       - name: checkout code
@@ -43,9 +43,9 @@ jobs:
         run: |
           make compose-test
   score-k8s:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
-      HUMCTL_VERSION: '0.25.0'
+      HUMCTL_VERSION: '*'
       SCORE_K8S_VERSION: 'latest'
     steps:
       - name: checkout code
