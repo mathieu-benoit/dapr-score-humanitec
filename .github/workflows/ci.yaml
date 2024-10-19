@@ -10,7 +10,7 @@ jobs:
       HUMCTL_VERSION: '*'
     steps:
       - name: checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: install humctl
         uses: humanitec/setup-cli-action@v1
         with:
@@ -32,7 +32,7 @@ jobs:
       SCORE_COMPOSE_VERSION: 'latest'
     steps:
       - name: checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: install score-compose
         uses: score-spec/setup-score@v3
         with:
@@ -49,7 +49,7 @@ jobs:
       SCORE_K8S_VERSION: 'latest'
     steps:
       - name: checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: install score-k8s
         uses: score-spec/setup-score@v3
         with:
