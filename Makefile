@@ -13,7 +13,9 @@ help:
 
 .score-compose/state.yaml:
 	score-compose init \
-		--no-sample
+		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-compose/00-service.provisioners.yaml \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-compose/00-redis-dapr-state-store.provisioners.yaml
 
 compose.yaml: score-node.yaml score-python.yaml .score-compose/state.yaml Makefile
 	score-compose generate score-node.yaml
@@ -39,7 +41,9 @@ compose-down:
 
 .score-k8s/state.yaml:
 	score-k8s init \
-		--no-sample
+		--no-sample \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-k8s/00-service.provisioners.yaml \
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-k8s/00-redis-dapr-state-store.provisioners.yaml
 
 manifests.yaml: score-node.yaml score-python.yaml .score-k8s/state.yaml Makefile
 	score-k8s generate score-node.yaml
