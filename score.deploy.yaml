@@ -3,3 +3,4 @@ kind: ScoreDeployConfig
 workloads:
   - specFile: ./score-node.yaml
   - specFile: ./score-python.yaml
+  
