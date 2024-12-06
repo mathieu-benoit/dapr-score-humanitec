@@ -1,9 +1,5 @@
 compose.yaml
 .score-compose/*
-!.score-compose/00-service.provisioners.yaml
-!.score-compose/01-state-store.provisioners.yaml
 manifests.yaml
 .score-k8s/*
-!.score-k8s/00-service.provisioners.yaml
-!.score-k8s/01-state-store.provisioners.yaml
 .vscode/settings.json
