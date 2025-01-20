@@ -33,6 +33,7 @@ compose-up: compose.yaml
 .PHONY: compose-test
 compose-test: compose-up
 	curl $$(score-compose resources get-outputs dns.default#nodeapp.dns --format '{{ .host }}:8080') # Will return "Cannot GET" but that's not an error per se.
+	docker logs dapr-score-humanitec-nodeapp-nodeapp-1
 
 ## Delete the containers running via compose down.
 .PHONY: compose-down
@@ -70,6 +71,7 @@ k8s-up: manifests.yaml
 		-l app.kubernetes.io/name=nodeapp \
 		--for condition=Ready \
 		--timeout=90s
+	sleep 5
 
 ## Test the exposed endpoint and show the logs.
 .PHONY: k8s-test
