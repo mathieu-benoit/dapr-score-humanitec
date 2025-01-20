@@ -13,7 +13,7 @@ Resources used in the blog post: [Dapr with Score and Humanitec — Improving th
 ```bash
 make compose-test
 
-docker logs hello-world-nodeapp-nodeapp-1
+docker logs dapr-score-humanitec-nodeapp-nodeapp-1
 ```
 
 ## Deploy to Kubernetes
