@@ -15,13 +15,13 @@ help:
 	score-compose init \
 		--no-sample \
 		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-compose/10-service.provisioners.yaml \
-		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-compose/10-redis-dapr-state-store.provisioners.yaml
+		--provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-compose/10-redis-dapr-state-store.provisioners.yaml \
+		--patch-templates https://raw.githubusercontent.com/score-spec/community-patchers/refs/heads/main/score-compose/dapr.tpl
+
 
 compose.yaml: score-node.yaml score-python.yaml .score-compose/state.yaml Makefile
 	score-compose generate score-node.yaml
 	score-compose generate score-python.yaml
-	scripts/inject-dapr-sidecar.sh
-	scripts/inject-dapr-placement.sh
 
 ## Generate a compose.yaml file from the score spec and launch it.
 .PHONY: compose-up
